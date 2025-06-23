@@ -64,7 +64,7 @@ export default async function handler(req, res) {
         return res.status(200).json({ 
             success: true, 
             shortId,
-            link: `${process.env.SITE_URL || 'https://fstech-digital.github.io/leah'}#v/${shortId}`
+            link: `${process.env.SITE_URL || 'https://leah-costura.vercel.app'}#m/${shortId}`
         });
 
     } catch (error) {

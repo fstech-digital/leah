@@ -72,7 +72,7 @@ export default async function handler(req, res) {
                     id: orcamento.id,
                     cliente: orcamento.cliente.nome,
                     status: 'sucesso',
-                    shareLink: `${process.env.SITE_URL || 'https://fstech-digital.github.io/leah'}#v/${shortId}`
+                    shareLink: `${process.env.SITE_URL || 'https://leah-costura.vercel.app'}#m/${shortId}`
                 });
 
                 sucessos++;

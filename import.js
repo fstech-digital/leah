@@ -314,8 +314,12 @@ class ImportManager {
     getApiUrl() {
         if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
             return 'http://localhost:3000';
+        } else if (window.location.hostname.includes('vercel.app')) {
+            return window.location.origin;
+        } else if (window.location.hostname.includes('github.io')) {
+            return 'https://leah-costura.vercel.app';
         }
-        return 'https://leah-costura.vercel.app';
+        return window.location.origin;
     }
 
     convertToInternalFormat(jsonOrcamento) {

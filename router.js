@@ -60,7 +60,7 @@ class Router {
             title: 'Orçamento - Leah Karina'
         });
 
-        this.addRoute('v/:id', {
+        this.addRoute('m/:id', {
             handler: (params) => this.showOrcamentoMongoDB(params.id),
             title: 'Orçamento - Leah Karina'
         });

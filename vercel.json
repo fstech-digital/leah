@@ -5,6 +5,12 @@
     },
     "api/get.js": {
       "runtime": "nodejs18.x"
+    },
+    "api/import.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/list.js": {
+      "runtime": "nodejs18.x"
     }
   },
   "env": {

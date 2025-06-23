@@ -966,23 +966,12 @@ class App {
         }
     }
 
-    compartilharWhatsApp() {
+    async compartilharWhatsApp() {
         if (!this.currentOrcamento) return;
 
         const config = storageManager.getConfig();
         const profissional = config.profissional || {};
         
-        // Gerar link com dados codificados
-        const linkCompartilhamento = this.gerarLinkCompartilhamento(this.currentOrcamento);
-        
-        const mensagem = `🌟 *Orçamento #${this.currentOrcamento.id}*\n\n` +
-                        `Olá ${this.currentOrcamento.cliente.nome}!\n\n` +
-                        `Seu orçamento está pronto. Confira todos os detalhes:\n` +
-                        `${linkCompartilhamento}\n\n` +
-                        `*Total: ${Utils.formatCurrency(this.currentOrcamento.total)}*\n\n` +
-                        `Qualquer dúvida, entre em contato!\n\n` +
-                        `${profissional.nome || 'Leah Karina'}`;
-
         const telefone = this.currentOrcamento.cliente.telefone?.replace(/\D/g, '') || '';
         
         if (!telefone) {
@@ -990,8 +979,25 @@ class App {
             return;
         }
 
-        const whatsappUrl = Utils.generateWhatsAppLink(telefone, mensagem);
-        window.open(whatsappUrl, '_blank');
+        try {
+            // Gerar link com await para resolver a Promise
+            const linkCompartilhamento = await this.gerarLinkCompartilhamento(this.currentOrcamento);
+            
+            const mensagem = `🌟 *Orçamento #${this.currentOrcamento.id}*\n\n` +
+                            `Olá ${this.currentOrcamento.cliente.nome}!\n\n` +
+                            `Seu orçamento está pronto. Confira todos os detalhes:\n` +
+                            `${linkCompartilhamento}\n\n` +
+                            `*Total: ${Utils.formatCurrency(this.currentOrcamento.total)}*\n\n` +
+                            `Qualquer dúvida, entre em contato!\n\n` +
+                            `${profissional.nome || 'Leah Karina'}`;
+
+            const whatsappUrl = Utils.generateWhatsAppLink(telefone, mensagem);
+            window.open(whatsappUrl, '_blank');
+            
+        } catch (error) {
+            console.error('Erro ao gerar link para WhatsApp:', error);
+            Utils.showToast('Erro ao gerar link. Tente novamente.', 'error');
+        }
     }
 
     async gerarLinkCompartilhamento(orcamento) {
