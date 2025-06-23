@@ -6,23 +6,22 @@
 }
 
 :root {
-    --rosa-suave: #f8e5e8;
-    --malva: #8b5a6f;
-    --rosa-medio: #d68a9c;
-    --branco-creme: #fef9f8;
+    --bege-claro: #F2DEB5;
+    --creme: #F9F0DB;
+    --marrom-escuro: #8F704E;
     --cinza-claro: #f5f5f5;
     --cinza-medio: #666;
     --branco: #ffffff;
-    --sombra: rgba(139, 90, 111, 0.1);
-    --sombra-hover: rgba(139, 90, 111, 0.2);
+    --sombra: rgba(143, 112, 78, 0.1);
+    --sombra-hover: rgba(143, 112, 78, 0.2);
     --border-radius: 12px;
     --transition: all 0.3s ease;
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, var(--rosa-suave) 0%, var(--branco-creme) 100%);
-    color: var(--malva);
+    background: linear-gradient(135deg, var(--bege-claro) 0%, var(--creme) 100%);
+    color: var(--marrom-escuro);
     line-height: 1.6;
     min-height: 100vh;
 }
@@ -52,13 +51,13 @@ body {
 .logo h1 {
     font-family: 'Playfair Display', serif;
     font-size: 2rem;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     margin-bottom: -5px;
 }
 
 .logo p {
     font-size: 0.9rem;
-    color: var(--rosa-medio);
+    color: var(--marrom-escuro);
     font-weight: 300;
 }
 
@@ -69,8 +68,8 @@ body {
 
 .nav-btn {
     background: transparent;
-    border: 2px solid var(--rosa-medio);
-    color: var(--rosa-medio);
+    border: 2px solid var(--marrom-escuro);
+    color: var(--marrom-escuro);
     padding: 10px 20px;
     border-radius: var(--border-radius);
     cursor: pointer;
@@ -80,7 +79,7 @@ body {
 
 .nav-btn:hover,
 .nav-btn.active {
-    background: var(--rosa-medio);
+    background: var(--marrom-escuro);
     color: var(--branco);
 }
 
@@ -117,12 +116,12 @@ body {
 .page-header h2 {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 /* Buttons */
 .btn {
-    background: var(--rosa-medio);
+    background: var(--marrom-escuro);
     color: var(--branco);
     border: none;
     padding: 12px 24px;
@@ -138,13 +137,13 @@ body {
 }
 
 .btn:hover {
-    background: var(--malva);
+    background: var(--marrom-escuro);
     transform: translateY(-2px);
     box-shadow: 0 5px 15px var(--sombra-hover);
 }
 
 .btn-primary {
-    background: var(--rosa-medio);
+    background: var(--marrom-escuro);
 }
 
 .btn-secondary {
@@ -153,12 +152,12 @@ body {
 
 .btn-outline {
     background: transparent;
-    border: 2px solid var(--rosa-medio);
-    color: var(--rosa-medio);
+    border: 2px solid var(--marrom-escuro);
+    color: var(--marrom-escuro);
 }
 
 .btn-outline:hover {
-    background: var(--rosa-medio);
+    background: var(--marrom-escuro);
     color: var(--branco);
 }
 
@@ -184,7 +183,7 @@ body {
     width: 100%;
     max-width: 400px;
     padding: 15px 20px;
-    border: 2px solid var(--rosa-suave);
+    border: 2px solid var(--bege-claro);
     border-radius: var(--border-radius);
     font-size: 1rem;
     background: var(--branco);
@@ -193,8 +192,8 @@ body {
 
 .search-input:focus {
     outline: none;
-    border-color: var(--rosa-medio);
-    box-shadow: 0 0 0 3px rgba(214, 138, 156, 0.1);
+    border-color: var(--marrom-escuro);
+    box-shadow: 0 0 0 3px rgba(143, 112, 78, 0.1);
 }
 
 /* Orçamentos Grid */
@@ -218,7 +217,7 @@ body {
 .orcamento-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 30px var(--sombra-hover);
-    border-color: var(--rosa-medio);
+    border-color: var(--marrom-escuro);
 }
 
 .orcamento-header {
@@ -230,7 +229,7 @@ body {
 
 .orcamento-id {
     font-weight: 600;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     font-size: 1.1rem;
 }
 
@@ -252,14 +251,14 @@ body {
 }
 
 .status-rascunho {
-    background: var(--rosa-suave);
-    color: var(--malva);
+    background: var(--bege-claro);
+    color: var(--marrom-escuro);
 }
 
 .orcamento-cliente {
     font-size: 1.2rem;
     font-weight: 500;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     margin-bottom: 10px;
 }
 
@@ -275,7 +274,7 @@ body {
 .orcamento-total {
     font-size: 1.5rem;
     font-weight: 700;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     text-align: right;
 }
 
@@ -297,7 +296,7 @@ body {
 .empty-state h3 {
     font-family: 'Playfair Display', serif;
     font-size: 1.8rem;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     margin-bottom: 10px;
 }
 
@@ -318,7 +317,7 @@ body {
 .form-section {
     margin-bottom: 40px;
     padding-bottom: 30px;
-    border-bottom: 1px solid var(--rosa-suave);
+    border-bottom: 1px solid var(--bege-claro);
 }
 
 .form-section:last-child {
@@ -329,7 +328,7 @@ body {
 .form-section h3 {
     font-family: 'Playfair Display', serif;
     font-size: 1.5rem;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     margin-bottom: 20px;
 }
 
@@ -358,14 +357,14 @@ body {
 .form-group label {
     margin-bottom: 8px;
     font-weight: 500;
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
     padding: 12px 15px;
-    border: 2px solid var(--rosa-suave);
+    border: 2px solid var(--bege-claro);
     border-radius: var(--border-radius);
     font-size: 1rem;
     transition: var(--transition);
@@ -376,8 +375,8 @@ body {
 .form-group textarea:focus,
 .form-group select:focus {
     outline: none;
-    border-color: var(--rosa-medio);
-    box-shadow: 0 0 0 3px rgba(214, 138, 156, 0.1);
+    border-color: var(--marrom-escuro);
+    box-shadow: 0 0 0 3px rgba(143, 112, 78, 0.1);
 }
 
 /* Item do Orçamento */
@@ -398,7 +397,7 @@ body {
 
 .item-numero {
     font-weight: 600;
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 .btn-remover {
@@ -423,7 +422,7 @@ body {
 
 /* Total Section */
 .total-section {
-    background: var(--rosa-suave);
+    background: var(--bege-claro);
     border-radius: var(--border-radius);
     padding: 20px;
     margin: 30px 0;
@@ -435,7 +434,7 @@ body {
     align-items: center;
     font-size: 1.3rem;
     font-weight: 600;
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 .total-value {
@@ -463,15 +462,15 @@ body {
 .orcamento-titulo {
     font-family: 'Playfair Display', serif;
     font-size: 2.5rem;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     text-align: center;
     margin-bottom: 30px;
-    border-bottom: 3px solid var(--rosa-medio);
+    border-bottom: 3px solid var(--marrom-escuro);
     padding-bottom: 20px;
 }
 
 .cliente-info {
-    background: var(--rosa-suave);
+    background: var(--bege-claro);
     border-radius: var(--border-radius);
     padding: 25px;
     margin-bottom: 30px;
@@ -480,7 +479,7 @@ body {
 .cliente-info h4 {
     font-family: 'Playfair Display', serif;
     font-size: 1.3rem;
-    color: var(--malva);
+    color: var(--marrom-escuro);
     margin-bottom: 15px;
 }
 
@@ -500,17 +499,17 @@ body {
 .itens-table td {
     padding: 15px;
     text-align: left;
-    border-bottom: 1px solid var(--rosa-suave);
+    border-bottom: 1px solid var(--bege-claro);
 }
 
 .itens-table th {
-    background: var(--malva);
+    background: var(--marrom-escuro);
     color: var(--branco);
     font-weight: 600;
 }
 
 .itens-table tr:nth-child(even) {
-    background: var(--rosa-suave);
+    background: var(--bege-claro);
 }
 
 .itens-table .valor-cell {
@@ -530,14 +529,14 @@ body {
 }
 
 .info-adicional h5 {
-    color: var(--malva);
+    color: var(--marrom-escuro);
     margin-bottom: 10px;
 }
 
 .total-final {
     text-align: right;
     padding: 20px;
-    background: var(--malva);
+    background: var(--marrom-escuro);
     color: var(--branco);
     border-radius: var(--border-radius);
 }
@@ -591,12 +590,12 @@ body {
     justify-content: space-between;
     align-items: center;
     padding: 25px 30px 15px;
-    border-bottom: 1px solid var(--rosa-suave);
+    border-bottom: 1px solid var(--bege-claro);
 }
 
 .modal-header h3 {
     font-family: 'Playfair Display', serif;
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 .modal-close {
@@ -609,7 +608,7 @@ body {
 }
 
 .modal-close:hover {
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 .modal-body {
@@ -624,7 +623,7 @@ body {
     display: block;
     margin-bottom: 10px;
     font-weight: 500;
-    color: var(--malva);
+    color: var(--marrom-escuro);
 }
 
 .copy-link {
@@ -635,7 +634,7 @@ body {
 .copy-link input {
     flex: 1;
     padding: 12px 15px;
-    border: 2px solid var(--rosa-suave);
+    border: 2px solid var(--bege-claro);
     border-radius: var(--border-radius);
     background: var(--cinza-claro);
 }

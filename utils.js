@@ -327,7 +327,7 @@ class Utils {
         }
         
         texto += `\n---\n`;
-        texto += `${profissional.nome || 'Leah Costura'}\n`;
+        texto += `${profissional.nome || 'Leah Karina'}\n`;
         if (profissional.telefone) {
             texto += `${this.formatPhone(profissional.telefone)}\n`;
         }

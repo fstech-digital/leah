@@ -22,22 +22,22 @@ class Router {
         // Registrar todas as rotas da aplicação
         this.addRoute('dashboard', {
             handler: () => this.showDashboard(),
-            title: 'Dashboard - Leah Costura'
+            title: 'Dashboard - Leah Karina'
         });
 
         this.addRoute('novo', {
             handler: () => this.showNovoOrcamento(),
-            title: 'Novo Orçamento - Leah Costura'
+            title: 'Novo Orçamento - Leah Karina'
         });
 
         this.addRoute('orcamento/:id', {
             handler: (params) => this.showOrcamento(params.id),
-            title: 'Orçamento - Leah Costura'
+            title: 'Orçamento - Leah Karina'
         });
 
         this.addRoute('editar/:id', {
             handler: (params) => this.editOrcamento(params.id),
-            title: 'Editar Orçamento - Leah Costura'
+            title: 'Editar Orçamento - Leah Karina'
         });
     }
 

@@ -35,16 +35,16 @@
     
     .orcamento-titulo {
         font-size: 18pt;
-        color: #8b5a6f !important;
+        color: #8F704E !important;
         text-align: center;
         margin-bottom: 20pt;
-        border-bottom: 2pt solid #8b5a6f;
+        border-bottom: 2pt solid #8F704E;
         padding-bottom: 10pt;
     }
     
     .cliente-info {
-        background: #f8e5e8 !important;
-        border: 1px solid #d68a9c;
+        background: #F2DEB5 !important;
+        border: 1px solid #8F704E;
         padding: 15pt;
         margin-bottom: 20pt;
         page-break-inside: avoid;
@@ -52,7 +52,7 @@
     
     .cliente-info h4 {
         font-size: 14pt;
-        color: #8b5a6f !important;
+        color: #8F704E !important;
         margin-bottom: 10pt;
     }
     
@@ -72,7 +72,7 @@
     }
     
     .itens-table th {
-        background: #8b5a6f !important;
+        background: #8F704E !important;
         color: white !important;
         padding: 8pt;
         border: 1px solid #666;
@@ -86,7 +86,7 @@
     }
     
     .itens-table tr:nth-child(even) {
-        background: #f8e5e8 !important;
+        background: #F2DEB5 !important;
     }
     
     .valor-cell {
@@ -104,16 +104,16 @@
     }
     
     .info-adicional h5 {
-        color: #8b5a6f !important;
+        color: #8F704E !important;
         font-weight: bold;
         margin-bottom: 5pt;
     }
     
     .total-final {
-        background: #8b5a6f !important;
+        background: #8F704E !important;
         color: white !important;
         padding: 15pt;
-        border: 2px solid #8b5a6f;
+        border: 2px solid #8F704E;
         text-align: center;
         margin-top: 20pt;
     }
@@ -132,10 +132,10 @@
     @page {
         margin: 2cm;
         @top-center {
-            content: "Leah Costura - Orçamento";
-            font-family: 'Playfair Display', serif;
+            content: "Leah Karina - Orçamento";
+            font-family: 'Avenir Next', sans-serif;
             font-size: 10pt;
-            color: #8b5a6f;
+            color: #8F704E;
         }
         @bottom-right {
             content: "Página " counter(page) " de " counter(pages);

@@ -18,8 +18,8 @@ class StorageManager {
                 profissional: {
                     nome: 'Leah Karina',
                     telefone: '(11) 95606-1906',
-                    endereco: 'Higienópolis, São Paulo',
-                    email: 'leah@costura.com'
+                    endereco: 'Tábata, São Paulo',
+                    email: 'leah@karina.com'
                 }
             }));
         }

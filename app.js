@@ -612,7 +612,7 @@ class App {
                         `${Utils.generateShareLink(this.currentOrcamento.id)}\n\n` +
                         `*Total: ${Utils.formatCurrency(this.currentOrcamento.total)}*\n\n` +
                         `Qualquer dúvida, entre em contato!\n\n` +
-                        `${profissional.nome || 'Leah Costura'}`;
+                        `${profissional.nome || 'Leah Karina'}`;
 
         const telefone = this.currentOrcamento.cliente.telefone?.replace(/\D/g, '') || '';
         
