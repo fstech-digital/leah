@@ -1,0 +1,24 @@
+{
+  "functions": {
+    "api/save.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/get.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "SITE_URL": "https://leah-costura.vercel.app"
+  },
+  "rewrites": [
+    {
+      "source": "/api/save",
+      "destination": "/api/save.js"
+    },
+    {
+      "source": "/api/get/(.*)",
+      "destination": "/api/get.js?id=$1"
+    }
+  ]
+}

@@ -811,8 +811,38 @@ class App {
         window.open(whatsappUrl, '_blank');
     }
 
-    gerarLinkCompartilhamento(orcamento) {
-        // Criar dados realmente mínimos - apenas o essencial para visualização
+    async gerarLinkCompartilhamento(orcamento) {
+        try {
+            // Tentar salvar no MongoDB primeiro
+            const apiUrl = this.getApiUrl();
+            
+            const response = await fetch(`${apiUrl}/api/save`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orcamento)
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Orçamento salvo no MongoDB:', result.shortId);
+                return result.link;
+            } else {
+                console.warn('Erro na API, usando fallback local');
+                throw new Error('API indisponível');
+            }
+
+        } catch (error) {
+            console.warn('MongoDB indisponível, usando sistema local:', error);
+            
+            // Fallback para sistema local
+            return this.gerarLinkLocal(orcamento);
+        }
+    }
+
+    gerarLinkLocal(orcamento) {
+        // Sistema local como fallback
         const dadosMinimos = [
             orcamento.id,
             orcamento.cliente.nome,
@@ -821,18 +851,24 @@ class App {
             orcamento.data_criacao?.split('T')[0] || new Date().toISOString().split('T')[0]
         ];
         
-        // Converter para string compacta separada por |
         const dataString = dadosMinimos.join('|');
-        
-        // Codificar em base64 URL-safe
         const encoded = btoa(encodeURIComponent(dataString))
             .replace(/[+/=]/g, (char) => ({ '+': '-', '/': '_', '=': '' }[char]));
         
         const baseUrl = window.location.origin + window.location.pathname;
-        const linkFinal = `${baseUrl}#s/${encoded}`;
-        console.log('Link simples gerado:', linkFinal);
-        
-        return linkFinal;
+        return `${baseUrl}#s/${encoded}`;
+    }
+
+    getApiUrl() {
+        // Detectar ambiente
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:3000';
+        } else if (window.location.hostname.includes('vercel.app')) {
+            return window.location.origin;
+        } else if (window.location.hostname.includes('github.io')) {
+            return 'https://leah-costura.vercel.app'; // API separada
+        }
+        return window.location.origin;
     }
 
     loadOrcamentoCompartilhado(orcamento) {

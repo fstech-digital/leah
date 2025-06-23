@@ -59,6 +59,11 @@ class Router {
             handler: (params) => this.showOrcamentoSimples(params.data),
             title: 'Orçamento - Leah Karina'
         });
+
+        this.addRoute('v/:id', {
+            handler: (params) => this.showOrcamentoMongoDB(params.id),
+            title: 'Orçamento - Leah Karina'
+        });
     }
 
     addRoute(path, config) {
@@ -363,6 +368,50 @@ class Router {
             this.showError('Link inválido. Solicite um novo link.');
             this.navigateTo('dashboard');
         }
+    }
+
+    async showOrcamentoMongoDB(shortId) {
+        try {
+            // Buscar orçamento no MongoDB
+            const apiUrl = this.getApiUrl();
+            const response = await fetch(`${apiUrl}/api/get/${shortId}`);
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Orçamento carregado do MongoDB:', result.orcamento);
+                
+                // Mostrar página de visualização
+                this.showPage('visualizar-orcamento');
+                if (window.app && window.app.loadOrcamentoCompartilhado) {
+                    window.app.loadOrcamentoCompartilhado(result.orcamento);
+                }
+            } else {
+                const error = await response.json();
+                if (error.expired) {
+                    this.showError('Este orçamento expirou. Solicite um novo link.');
+                } else {
+                    this.showError('Orçamento não encontrado.');
+                }
+                this.navigateTo('dashboard');
+            }
+
+        } catch (error) {
+            console.error('Erro ao buscar orçamento no MongoDB:', error);
+            this.showError('Erro ao carregar orçamento. Verifique sua conexão.');
+            this.navigateTo('dashboard');
+        }
+    }
+
+    getApiUrl() {
+        // Detectar ambiente (mesmo método do app.js)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:3000';
+        } else if (window.location.hostname.includes('vercel.app')) {
+            return window.location.origin;
+        } else if (window.location.hostname.includes('github.io')) {
+            return 'https://leah-costura.vercel.app';
+        }
+        return window.location.origin;
     }
 
     showPage(pageId) {
