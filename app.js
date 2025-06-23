@@ -74,35 +74,48 @@ class App {
             btnSalvarRascunho.addEventListener('click', () => this.salvarRascunho());
         }
 
-        // Visualização de orçamento
-        const btnEditarOrc = document.getElementById('btn-editar');
-        const btnDuplicarOrc = document.getElementById('btn-duplicar');
-        const btnExcluirOrc = document.getElementById('btn-excluir');
-        const btnCompartilharOrc = document.getElementById('btn-compartilhar');
-        const btnVoltarVis = document.getElementById('btn-voltar-vis');
-
-        if (btnEditarOrc) {
-            btnEditarOrc.addEventListener('click', () => this.editarOrcamento());
-        }
-        
-        if (btnDuplicarOrc) {
-            btnDuplicarOrc.addEventListener('click', () => this.duplicarOrcamento());
-        }
-
-        if (btnExcluirOrc) {
-            btnExcluirOrc.addEventListener('click', () => this.excluirOrcamento());
-        }
-        
-        if (btnCompartilharOrc) {
-            btnCompartilharOrc.addEventListener('click', () => this.mostrarModalCompartilhar());
-        }
-        
-        if (btnVoltarVis) {
-            btnVoltarVis.addEventListener('click', () => router.navigateTo('dashboard'));
-        }
-
         // Modal de compartilhamento
         this.setupModalCompartilhar();
+        
+        // Visualização de orçamento - configurar dinamicamente
+        this.setupVisualizacaoEventListeners();
+    }
+
+    setupVisualizacaoEventListeners() {
+        // Remover listeners existentes para evitar duplicação
+        if (this.handleVisualizacaoClick) {
+            document.removeEventListener('click', this.handleVisualizacaoClick);
+        }
+        
+        // Adicionar listener único para todos os botões de visualização
+        this.handleVisualizacaoClick = (e) => {
+            console.log('Click detectado em:', e.target.id);
+            console.log('this no handleVisualizacaoClick:', this);
+            
+            if (e.target.id === 'btn-editar') {
+                e.preventDefault();
+                console.log('Botão editar clicado');
+                this.editarOrcamento();
+            } else if (e.target.id === 'btn-duplicar') {
+                e.preventDefault();
+                console.log('Botão duplicar clicado');
+                this.duplicarOrcamento();
+            } else if (e.target.id === 'btn-excluir') {
+                e.preventDefault();
+                console.log('Botão excluir clicado');
+                this.excluirOrcamento();
+            } else if (e.target.id === 'btn-compartilhar') {
+                e.preventDefault();
+                console.log('Botão compartilhar clicado');
+                this.mostrarModalCompartilhar();
+            } else if (e.target.id === 'btn-voltar-vis') {
+                e.preventDefault();
+                console.log('Botão voltar clicado');
+                router.navigateTo('dashboard');
+            }
+        };
+        
+        document.addEventListener('click', this.handleVisualizacaoClick);
     }
 
     setupModalCompartilhar() {
@@ -529,11 +542,65 @@ class App {
 
         // Definir orçamento atual para uso nos botões
         this.currentOrcamento = orcamento;
+        console.log('loadVisualizarOrcamento - currentOrcamento definido:', this.currentOrcamento);
 
         const config = storageManager.getConfig();
         const profissional = config.profissional || {};
 
         container.innerHTML = this.createOrcamentoViewer(orcamento, profissional);
+
+        // Reconfigurar listeners após carregar conteúdo
+        this.setupVisualizacaoEventListeners();
+        
+        // Configurar listeners diretos também (fallback)
+        setTimeout(() => {
+            const btnEditar = document.getElementById('btn-editar');
+            const btnDuplicar = document.getElementById('btn-duplicar');
+            const btnExcluir = document.getElementById('btn-excluir');
+            const btnCompartilhar = document.getElementById('btn-compartilhar');
+            const btnVoltar = document.getElementById('btn-voltar-vis');
+
+            if (btnEditar) {
+                btnEditar.onclick = (e) => {
+                    e.preventDefault();
+                    this.editarOrcamento();
+                };
+            }
+            
+            if (btnDuplicar) {
+                btnDuplicar.onclick = (e) => {
+                    e.preventDefault();
+                    this.duplicarOrcamento();
+                };
+            }
+            
+            if (btnExcluir) {
+                btnExcluir.onclick = (e) => {
+                    e.preventDefault();
+                    this.excluirOrcamento();
+                };
+            }
+            
+            if (btnCompartilhar) {
+                btnCompartilhar.onclick = (e) => {
+                    e.preventDefault();
+                    this.mostrarModalCompartilhar();
+                };
+            }
+            
+            if (btnVoltar) {
+                btnVoltar.onclick = (e) => {
+                    e.preventDefault();
+                    router.navigateTo('dashboard');
+                };
+            }
+        }, 100);
+
+        // Mostrar header de ações se necessário
+        const pageHeader = document.querySelector('#visualizar-orcamento .page-header');
+        if (pageHeader) {
+            pageHeader.style.display = 'flex';
+        }
     }
 
     createOrcamentoViewer(orcamento, profissional) {
@@ -641,6 +708,7 @@ class App {
     async excluirOrcamento() {
         console.log('excluirOrcamento chamado');
         console.log('currentOrcamento:', this.currentOrcamento);
+        console.log('this no excluirOrcamento:', this);
         
         if (!this.currentOrcamento) {
             Utils.showToast('Nenhum orçamento selecionado', 'error');
@@ -765,6 +833,7 @@ class App {
         if (!container) return;
 
         this.currentOrcamento = orcamento;
+        console.log('loadOrcamentoCompartilhado - orçamento carregado:', this.currentOrcamento);
 
         const config = storageManager.getConfig();
         const profissional = config.profissional || {
