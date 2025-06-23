@@ -221,48 +221,101 @@ class ImportManager {
 
         try {
             const orcamentos = this.parsedData.orcamentos;
-            let importados = 0;
-            let erros = 0;
-
-            for (const orcamentoData of orcamentos) {
-                try {
-                    // Converter formato do JSON para formato interno
-                    const orcamento = this.convertToInternalFormat(orcamentoData);
-                    
-                    // Salvar orçamento
-                    storageManager.saveOrcamento(orcamento);
-                    importados++;
-
-                } catch (error) {
-                    console.error('Erro ao importar orçamento:', error);
-                    erros++;
-                }
-            }
-
-            // Mostrar resultado
-            if (importados > 0) {
+            
+            // Converter para formato interno
+            const orcamentosConvertidos = orcamentos.map(orc => this.convertToInternalFormat(orc));
+            
+            // Tentar importar via MongoDB primeiro
+            const resultadoMongo = await this.importViaAPI(orcamentosConvertidos);
+            
+            if (resultadoMongo.success) {
+                // Sucesso via MongoDB
                 Utils.showToast(
-                    `${importados} orçamento(s) importado(s) com sucesso!` + 
-                    (erros > 0 ? ` (${erros} erro(s))` : ''), 
+                    `${resultadoMongo.sucessos} orçamento(s) importado(s) na nuvem!` + 
+                    (resultadoMongo.erros > 0 ? ` (${resultadoMongo.erros} erro(s))` : ''), 
                     'success'
                 );
-
-                // Fechar modal e recarregar dashboard
-                this.closeImportModal();
-                setTimeout(() => {
-                    if (window.app && window.app.loadDashboard) {
-                        window.app.loadDashboard();
-                    }
-                }, 1000);
-
+                
+                // Também salvar localmente como backup
+                this.saveLocalBackup(orcamentosConvertidos);
+                
             } else {
-                Utils.showToast('Nenhum orçamento pôde ser importado', 'error');
+                // Fallback para localStorage
+                let importados = 0;
+                let erros = 0;
+
+                for (const orcamento of orcamentosConvertidos) {
+                    try {
+                        storageManager.saveOrcamento(orcamento);
+                        importados++;
+                    } catch (error) {
+                        console.error('Erro ao importar orçamento:', error);
+                        erros++;
+                    }
+                }
+
+                Utils.showToast(
+                    `${importados} orçamento(s) importado(s) localmente!` + 
+                    (erros > 0 ? ` (${erros} erro(s))` : '') +
+                    ' (Salvo apenas no seu dispositivo)', 
+                    'success'
+                );
             }
+
+            // Fechar modal e recarregar dashboard
+            this.closeImportModal();
+            setTimeout(() => {
+                if (window.app && window.app.loadDashboard) {
+                    window.app.loadDashboard();
+                }
+            }, 1000);
 
         } catch (error) {
             console.error('Erro durante importação:', error);
             Utils.showToast('Erro durante a importação. Tente novamente.', 'error');
         }
+    }
+
+    async importViaAPI(orcamentos) {
+        try {
+            const apiUrl = this.getApiUrl();
+            const response = await fetch(`${apiUrl}/api/import`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ orcamentos })
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                return result;
+            } else {
+                console.error('Erro na API:', response.statusText);
+                return { success: false };
+            }
+
+        } catch (error) {
+            console.error('Erro ao conectar com API:', error);
+            return { success: false };
+        }
+    }
+
+    saveLocalBackup(orcamentos) {
+        try {
+            for (const orcamento of orcamentos) {
+                storageManager.saveOrcamento(orcamento);
+            }
+        } catch (error) {
+            console.error('Erro ao salvar backup local:', error);
+        }
+    }
+
+    getApiUrl() {
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            return 'http://localhost:3000';
+        }
+        return 'https://leah-costura.vercel.app';
     }
 
     convertToInternalFormat(jsonOrcamento) {

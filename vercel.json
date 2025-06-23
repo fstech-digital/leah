@@ -19,6 +19,14 @@
     {
       "source": "/api/get/(.*)",
       "destination": "/api/get.js?id=$1"
+    },
+    {
+      "source": "/api/import",
+      "destination": "/api/import.js"
+    },
+    {
+      "source": "/api/list",
+      "destination": "/api/list.js"
     }
   ]
 }
