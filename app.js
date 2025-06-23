@@ -77,6 +77,7 @@ class App {
         // Visualização de orçamento
         const btnEditarOrc = document.getElementById('btn-editar');
         const btnDuplicarOrc = document.getElementById('btn-duplicar');
+        const btnExcluirOrc = document.getElementById('btn-excluir');
         const btnCompartilharOrc = document.getElementById('btn-compartilhar');
         const btnVoltarVis = document.getElementById('btn-voltar-vis');
 
@@ -86,6 +87,10 @@ class App {
         
         if (btnDuplicarOrc) {
             btnDuplicarOrc.addEventListener('click', () => this.duplicarOrcamento());
+        }
+
+        if (btnExcluirOrc) {
+            btnExcluirOrc.addEventListener('click', () => this.excluirOrcamento());
         }
         
         if (btnCompartilharOrc) {
@@ -259,6 +264,9 @@ class App {
             }))
         );
 
+        const valorAlternativo = itemData?.valor_alternativo || null;
+        const hasValorAlternativo = !!valorAlternativo;
+
         const itemHtml = `
             <div class="item-orcamento">
                 <div class="item-header">
@@ -279,6 +287,21 @@ class App {
                         <input type="text" class="item-valor" value="${itemData ? Utils.formatCurrency(itemData.valor).replace('R$ ', '') : ''}" required>
                     </div>
                 </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" class="tem-valor-alternativo" ${hasValorAlternativo ? 'checked' : ''}> Tem valor alternativo
+                    </label>
+                </div>
+                <div class="valor-alternativo" style="display: ${hasValorAlternativo ? 'block' : 'none'};">
+                    <div class="form-group">
+                        <label>Valor Alternativo (R$)</label>
+                        <input type="text" class="item-valor-alt" value="${valorAlternativo ? Utils.formatCurrency(valorAlternativo.valor).replace('R$ ', '') : ''}" placeholder="Valor opcional">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição do Valor Alternativo</label>
+                        <input type="text" class="item-valor-alt-desc" value="${valorAlternativo?.descricao || ''}" placeholder="Ex: se cliente trouxer tecido">
+                    </div>
+                </div>
             </div>
         `;
 
@@ -287,10 +310,28 @@ class App {
         // Adicionar listeners para o novo item
         const novoItem = container.lastElementChild;
         const inputValor = novoItem.querySelector('.item-valor');
+        const inputValorAlt = novoItem.querySelector('.item-valor-alt');
+        const checkboxValorAlt = novoItem.querySelector('.tem-valor-alternativo');
+        const divValorAlt = novoItem.querySelector('.valor-alternativo');
         
         inputValor.addEventListener('input', (e) => {
             e.target.value = this.formatarInputValor(e.target.value);
             this.atualizarTotal();
+        });
+
+        if (inputValorAlt) {
+            inputValorAlt.addEventListener('input', (e) => {
+                e.target.value = this.formatarInputValor(e.target.value);
+            });
+        }
+
+        checkboxValorAlt.addEventListener('change', (e) => {
+            divValorAlt.style.display = e.target.checked ? 'block' : 'none';
+            if (!e.target.checked) {
+                // Limpar campos quando desabilitar
+                inputValorAlt.value = '';
+                novoItem.querySelector('.item-valor-alt-desc').value = '';
+            }
         });
 
         // Outros inputs também disparam atualização do total
@@ -345,7 +386,23 @@ class App {
             const valor = Utils.parseCurrency(valorText);
 
             if (peca && servico && valor > 0) {
-                itens.push({ numero, peca, servico, valor });
+                const item = { numero, peca, servico, valor };
+
+                // Verificar se tem valor alternativo
+                const temValorAlt = itemElement.querySelector('.tem-valor-alternativo').checked;
+                if (temValorAlt) {
+                    const valorAltText = itemElement.querySelector('.item-valor-alt').value.trim();
+                    const valorAltDesc = itemElement.querySelector('.item-valor-alt-desc').value.trim();
+                    
+                    if (valorAltText && valorAltDesc) {
+                        item.valor_alternativo = {
+                            valor: Utils.parseCurrency(valorAltText),
+                            descricao: valorAltDesc
+                        };
+                    }
+                }
+
+                itens.push(item);
             }
         });
 
@@ -470,6 +527,9 @@ class App {
         const container = document.getElementById('orcamento-content');
         if (!container) return;
 
+        // Definir orçamento atual para uso nos botões
+        this.currentOrcamento = orcamento;
+
         const config = storageManager.getConfig();
         const profissional = config.profissional || {};
 
@@ -477,14 +537,24 @@ class App {
     }
 
     createOrcamentoViewer(orcamento, profissional) {
-        const itensHtml = orcamento.itens.map(item => `
-            <tr>
-                <td>${item.numero}</td>
-                <td>${Utils.sanitizeHtml(item.peca)}</td>
-                <td>${Utils.sanitizeHtml(item.servico)}</td>
-                <td class="valor-cell">${Utils.formatCurrency(item.valor)}</td>
-            </tr>
-        `).join('');
+        const itensHtml = orcamento.itens.map(item => {
+            let servicoText = Utils.sanitizeHtml(item.servico);
+            let valorText = Utils.formatCurrency(item.valor);
+
+            // Adicionar valor alternativo se existir
+            if (item.valor_alternativo) {
+                servicoText += `<br><small style="color: #666; font-style: italic;">Alternativo: ${Utils.sanitizeHtml(item.valor_alternativo.descricao)} - ${Utils.formatCurrency(item.valor_alternativo.valor)}</small>`;
+            }
+
+            return `
+                <tr>
+                    <td>${item.numero}</td>
+                    <td>${Utils.sanitizeHtml(item.peca)}</td>
+                    <td>${servicoText}</td>
+                    <td class="valor-cell">${valorText}</td>
+                </tr>
+            `;
+        }).join('');
 
         const infoAdicional = [];
         if (orcamento.prazo) {
@@ -565,6 +635,47 @@ class App {
             } else {
                 Utils.showToast('Erro ao duplicar orçamento', 'error');
             }
+        }
+    }
+
+    async excluirOrcamento() {
+        console.log('excluirOrcamento chamado');
+        console.log('currentOrcamento:', this.currentOrcamento);
+        
+        if (!this.currentOrcamento) {
+            Utils.showToast('Nenhum orçamento selecionado', 'error');
+            return;
+        }
+
+        try {
+            const confirmacao = await Utils.confirm(
+                `Tem certeza que deseja excluir o orçamento #${this.currentOrcamento.id}?\n\nCliente: ${this.currentOrcamento.cliente.nome}\nValor: ${Utils.formatCurrency(this.currentOrcamento.total)}\n\nEsta ação não pode ser desfeita.`,
+                'Excluir Orçamento'
+            );
+
+            console.log('Confirmação:', confirmacao);
+
+            if (confirmacao) {
+                console.log('Excluindo orçamento:', this.currentOrcamento.id);
+                
+                const sucesso = storageManager.deleteOrcamento(this.currentOrcamento.id);
+                console.log('Resultado da exclusão:', sucesso);
+                
+                if (sucesso) {
+                    Utils.showToast('Orçamento excluído com sucesso!', 'success');
+                    
+                    // Voltar para dashboard após exclusão
+                    setTimeout(() => {
+                        router.navigateTo('dashboard');
+                    }, 1000);
+                } else {
+                    Utils.showToast('Erro ao excluir orçamento', 'error');
+                }
+            }
+
+        } catch (error) {
+            console.error('Erro ao excluir orçamento:', error);
+            Utils.showToast('Erro ao excluir orçamento. Tente novamente.', 'error');
         }
     }
 

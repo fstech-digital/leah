@@ -1,0 +1,219 @@
+{
+  "orcamentos": [
+    {
+      "id": "2025-001",
+      "data_criacao": "2025-06-23",
+      "profissional": {
+        "nome": "Leah Karina",
+        "telefone": "(11) 95606-1906",
+        "localizacao": "Tábata"
+      },
+      "cliente": {
+        "nome": "Andrea Klein"
+      },
+      "itens": [
+        {
+          "numero": 1,
+          "peca": "Vestido Branco Florido",
+          "servico": "Troca de Botão",
+          "valor": 15.00
+        },
+        {
+          "numero": 2,
+          "peca": "Calça Escolar Moleton 1",
+          "servico": "Cerzir Furo no Joelho à Máquina e Fechar Entrepernas",
+          "valor": 25.00
+        },
+        {
+          "numero": 3,
+          "peca": "Calça Escolar Moleton 2",
+          "servico": "Cerzir Furo no Joelho à Máquina e Fechar Entrepernas",
+          "valor": 25.00
+        },
+        {
+          "numero": 4,
+          "peca": "Calça Escolar Moleton 3",
+          "servico": "Fechar Entrepernas",
+          "valor": 15.00
+        },
+        {
+          "numero": 5,
+          "peca": "Calça Escolar Helanca",
+          "servico": "Fechar Entrepernas",
+          "valor": 15.00
+        },
+        {
+          "numero": 6,
+          "peca": "Calça Escolar Helanca",
+          "servico": "Fechar Entrepernas",
+          "valor": 15.00
+        },
+        {
+          "numero": 7,
+          "peca": "Vestido Rosa, Branco e Laranja",
+          "servico": "Aumentar Comprimento Usando o Próprio Cinto",
+          "valor": 30.00
+        },
+        {
+          "numero": 8,
+          "peca": "Saia Lápis Azul, Bege e Preta",
+          "servico": "Refazer Barra para Aumentar Comprimento",
+          "valor": 30.00
+        },
+        {
+          "numero": 9,
+          "peca": "Vestido Laise Pink",
+          "servico": "Reforçar Casa do Botão das Costas + Cerzir Furo à Mão Barra",
+          "valor": 40.00
+        },
+        {
+          "numero": 10,
+          "peca": "Saia Lápis Listras Azul, Pink e Branco",
+          "servico": "Refazer Barra para Aumentar Comprimento",
+          "valor": 30.00
+        },
+        {
+          "numero": 11,
+          "peca": "Saia Lápis Tricô Faixas",
+          "servico": "Trocar Elástico 3cm + Refazer Barra p/ Aumentar Comprimento",
+          "valor": 50.00
+        },
+        {
+          "numero": 12,
+          "peca": "Saia Lápis Folhas Verdes",
+          "servico": "Trocar Elástico 5cm + Refazer Barra p/ Aumentar Comprimento",
+          "valor": 50.00
+        },
+        {
+          "numero": 13,
+          "peca": "Saia Lápis Amarela",
+          "servico": "Trocar Elástico 5cm + Refazer Barra p/ Aumentar Comprimento",
+          "valor": 55.00
+        },
+        {
+          "numero": 14,
+          "peca": "Saia Lápis Tricô Branca e Prata",
+          "servico": "Trocar Elástico e Adaptar Cós para Aumentar Comprimento",
+          "valor": 50.00
+        },
+        {
+          "numero": 15,
+          "peca": "Conjunto Verde",
+          "servico": "Fechar a Saia e Diminuir Gola da Camiseta",
+          "valor": 45.00
+        },
+        {
+          "numero": 16,
+          "peca": "Vestido Rosa Escuro Laise Algodão",
+          "servico": "Colocar Gancho de Fechamento",
+          "valor": 12.00
+        },
+        {
+          "numero": 17,
+          "peca": "Vestido Flores Rosa, Marrom e Verde",
+          "servico": "Fechar Costura na Saia",
+          "valor": 12.00
+        },
+        {
+          "numero": 18,
+          "peca": "Vestido Verde Regada",
+          "servico": "Abrir Barra",
+          "valor": 20.00
+        },
+        {
+          "numero": 19,
+          "peca": "Vestido Verde Zara",
+          "servico": "Trocar Forro + Colocar Forro na Manga (comprando tecido)",
+          "valor": 190.00,
+          "valor_alternativo": {
+            "descricao": "Trocar Forro + Colocar Forro na Manga (cliente compra tecido)",
+            "valor": 120.00
+          }
+        },
+        {
+          "numero": 20,
+          "peca": "Saia Lápis Geométrica",
+          "servico": "Colocar Elástico 5cm + Refazer Barra p/ Aumentar Comprimento",
+          "valor": 45.00
+        },
+        {
+          "numero": 21,
+          "peca": "Vestido Verde Escuro",
+          "servico": "Fechar Desfiados à Mão",
+          "valor": 40.00
+        },
+        {
+          "numero": 22,
+          "peca": "Vestido Branco e Azul",
+          "servico": "Trocar Tule da Última Fileira + Refazer Barra para Aumentar Comp",
+          "valor": 50.00
+        }
+      ],
+      "resumo": {
+        "total_itens": 22,
+        "subtotal": 867.00,
+        "total": 867.00,
+        "total_com_tecido": 937.00,
+        "total_sem_tecido": 867.00
+      },
+      "observacoes": "O item 19 (Vestido Verde Zara) possui duas opções de valor: R$ 190,00 se a costureira comprar o tecido ou R$ 120,00 se a cliente fornecer o tecido.",
+      "prazo": "A combinar",
+      "status": "pendente"
+    },
+    {
+      "id": "2025-002",
+      "data_criacao": "2025-06-23",
+      "profissional": {
+        "nome": "Leah Karina",
+        "telefone": "(11) 95606-1906",
+        "localizacao": "Tábata"
+      },
+      "cliente": {
+        "nome": "Amanda Souccar"
+      },
+      "itens": [
+        {
+          "numero": 1,
+          "peca": "Kissui Cinza",
+          "servico": "Colocação de Faixa de Veludo",
+          "valor": 15.00
+        },
+        {
+          "numero": 2,
+          "peca": "Kissui Azul Marinho",
+          "servico": "Colocação de Faixa de Veludo",
+          "valor": 15.00
+        },
+        {
+          "numero": 3,
+          "peca": "Saia de Tricô",
+          "servico": "Trocar Elástico Exposto 5cm",
+          "valor": 30.00
+        },
+        {
+          "numero": 4,
+          "peca": "Calça Escolar Moletom",
+          "servico": "Troca de Elástico Embutido",
+          "valor": 20.00
+        }
+      ],
+      "resumo": {
+        "total_itens": 4,
+        "subtotal": 80.00,
+        "total": 80.00
+      },
+      "prazo": "A combinar",
+      "status": "pendente"
+    }
+  ],
+  "metadata": {
+    "data_exportacao": "2025-06-23",
+    "total_orcamentos": 2,
+    "valor_total_geral": 947.00,
+    "profissional": {
+      "nome": "Leah Karina",
+      "telefone": "(11) 95606-1906",
+      "localizacao": "Tábata"
+    }
+  }
+}

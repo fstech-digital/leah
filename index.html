@@ -33,10 +33,16 @@
                 <section id="dashboard" class="page active">
                     <div class="page-header">
                         <h2>Meus Orçamentos</h2>
-                        <button id="btn-novo-orcamento" class="btn btn-primary">
-                            <span class="icon">+</span>
-                            Novo Orçamento
-                        </button>
+                        <div class="header-actions">
+                            <button id="btn-importar-json" class="btn btn-outline">
+                                <span class="icon">📁</span>
+                                Importar JSON
+                            </button>
+                            <button id="btn-novo-orcamento" class="btn btn-primary">
+                                <span class="icon">+</span>
+                                Novo Orçamento
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="search-bar">
@@ -131,6 +137,7 @@
                         <div class="actions">
                             <button id="btn-editar" class="btn btn-outline">Editar</button>
                             <button id="btn-duplicar" class="btn btn-outline">Duplicar</button>
+                            <button id="btn-excluir" class="btn btn-danger">Excluir</button>
                             <button id="btn-compartilhar" class="btn btn-primary">Compartilhar</button>
                             <button id="btn-voltar-vis" class="btn btn-secondary">← Voltar</button>
                         </div>
@@ -168,9 +175,38 @@
         </div>
     </div>
 
+    <!-- Modal de Importar JSON -->
+    <div id="modal-importar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Importar Orçamentos</h3>
+                <button class="modal-close" id="modal-importar-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="import-option">
+                    <label>Selecione o arquivo JSON:</label>
+                    <input type="file" id="file-input" accept=".json" class="file-input">
+                    <div class="file-info" id="file-info" style="display: none;">
+                        <p>Arquivo selecionado: <span id="file-name"></span></p>
+                        <p>Tamanho: <span id="file-size"></span></p>
+                    </div>
+                </div>
+                <div class="import-preview" id="import-preview" style="display: none;">
+                    <h4>Preview dos Orçamentos:</h4>
+                    <div id="preview-content"></div>
+                </div>
+                <div class="import-actions" style="margin-top: 20px;">
+                    <button id="btn-cancelar-import" class="btn btn-secondary">Cancelar</button>
+                    <button id="btn-confirmar-import" class="btn btn-primary" disabled>Importar Orçamentos</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="storage.js"></script>
     <script src="utils.js"></script>
     <script src="router.js"></script>
+    <script src="import.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
