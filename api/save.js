@@ -2,7 +2,7 @@
 const { MongoClient } = require('mongodb');
 
 // Conexão MongoDB Atlas
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://contato:tCJ0QBFwkZK3MsNW@cluster0.mongodb.net/leahcostura?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://contato:tCJ0QBFwkZK3MsNW@leahcluster.0bwwwt1.mongodb.net/leahcostura?retryWrites=true&w=majority&appName=LeahCluster';
 const client = new MongoClient(MONGODB_URI);
 
 export default async function handler(req, res) {
