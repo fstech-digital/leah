@@ -829,3 +829,512 @@ body {
         padding: 20px;
     }
 }
+
+/* ========================================
+   NOVA EXIBIÇÃO DO ORÇAMENTO COMPLETO
+======================================== */
+
+.orcamento-completo {
+    background: var(--branco);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 20px var(--sombra);
+    overflow: hidden;
+    margin-bottom: 30px;
+}
+
+/* Cabeçalho do Orçamento */
+.orcamento-header {
+    background: linear-gradient(135deg, var(--marrom-escuro) 0%, var(--bege-claro) 100%);
+    color: var(--branco);
+    padding: 30px;
+}
+
+.header-principal {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.logo-section {
+    flex: 1;
+}
+
+.profissional-nome {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: var(--branco);
+}
+
+.profissional-subtitulo {
+    font-size: 1rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.orcamento-meta {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+.orcamento-numero {
+    font-size: 1.5rem;
+    font-weight: 600;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 8px 15px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+}
+
+.orcamento-data {
+    font-size: 0.95rem;
+    opacity: 0.9;
+}
+
+.orcamento-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pendente {
+    background: #FFA726;
+    color: var(--branco);
+}
+
+.status-aprovado {
+    background: #4CAF50;
+    color: var(--branco);
+}
+
+.status-rascunho {
+    background: #9E9E9E;
+    color: var(--branco);
+}
+
+.status-compartilhado {
+    background: #2196F3;
+    color: var(--branco);
+}
+
+.status-concluido {
+    background: #8BC34A;
+    color: var(--branco);
+}
+
+/* Seções do Orçamento */
+.cliente-section,
+.itens-section,
+.info-section {
+    padding: 30px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-section:last-of-type {
+    border-bottom: none;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    color: var(--marrom-escuro);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bege-claro);
+}
+
+.section-icon {
+    font-size: 1.2rem;
+}
+
+/* Dados do Cliente */
+.cliente-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.cliente-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cliente-item label {
+    font-weight: 600;
+    color: var(--marrom-escuro);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.cliente-item span {
+    font-size: 1rem;
+    color: var(--cinza-medio);
+    background: var(--creme);
+    padding: 10px 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--bege-claro);
+}
+
+/* Tabela de Itens Melhorada */
+.table-container {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.itens-table-melhorada {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--branco);
+    font-size: 0.95rem;
+}
+
+.itens-table-melhorada thead {
+    background: linear-gradient(135deg, var(--bege-claro), var(--creme));
+}
+
+.itens-table-melhorada th {
+    padding: 15px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: var(--marrom-escuro);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+    border-bottom: 2px solid var(--marrom-escuro);
+}
+
+.col-numero {
+    width: 60px;
+    text-align: center;
+}
+
+.col-peca {
+    width: 25%;
+}
+
+.col-servico {
+    width: 45%;
+}
+
+.col-valor {
+    width: 20%;
+    text-align: right;
+}
+
+.itens-table-melhorada tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s ease;
+}
+
+.itens-table-melhorada tbody tr:hover {
+    background-color: #fafafa;
+}
+
+.itens-table-melhorada td {
+    padding: 15px 12px;
+    vertical-align: top;
+}
+
+.item-numero {
+    text-align: center;
+    font-weight: 600;
+    color: var(--marrom-escuro);
+    background: var(--creme);
+}
+
+.item-peca {
+    font-weight: 500;
+    color: var(--marrom-escuro);
+}
+
+.servico-principal {
+    font-weight: 400;
+    color: var(--cinza-medio);
+    margin-bottom: 5px;
+}
+
+.valor-alternativo {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 6px;
+    margin-top: 8px;
+    border-left: 3px solid var(--bege-claro);
+}
+
+.alt-label {
+    font-weight: 500;
+    color: var(--marrom-escuro);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.alt-valor {
+    font-weight: 600;
+    color: #2E7D32;
+}
+
+.valor-cell {
+    text-align: right;
+}
+
+.valor-principal {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--marrom-escuro);
+    margin-bottom: 5px;
+}
+
+.valor-alt-display {
+    font-size: 0.9rem;
+    color: #2E7D32;
+    font-weight: 500;
+    background: #E8F5E8;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+/* Resumo de Valores */
+.resumo-valores {
+    background: linear-gradient(135deg, var(--creme), var(--bege-claro));
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+.resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(143, 112, 78, 0.1);
+}
+
+.resumo-linha:last-child {
+    border-bottom: none;
+}
+
+.resumo-linha.total-final-linha {
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid var(--marrom-escuro);
+    font-size: 1.1rem;
+}
+
+.total-label {
+    font-weight: 700;
+    color: var(--marrom-escuro);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.total-valor {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--marrom-escuro);
+}
+
+.valor-subtotal {
+    font-weight: 600;
+    color: var(--marrom-escuro);
+}
+
+.resumo-linha.alternativo {
+    background: rgba(46, 125, 50, 0.1);
+    margin: 5px -10px;
+    padding: 8px 10px;
+    border-radius: 4px;
+}
+
+.valor-alternativo-total {
+    font-weight: 600;
+    color: #2E7D32;
+}
+
+/* Informações Adicionais */
+.info-grid {
+    display: grid;
+    gap: 20px;
+}
+
+.info-item {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+    background: var(--creme);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--bege-claro);
+}
+
+.info-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    width: 40px;
+    text-align: center;
+}
+
+.info-content {
+    flex: 1;
+}
+
+.info-content strong {
+    color: var(--marrom-escuro);
+    display: block;
+    margin-bottom: 5px;
+}
+
+.observacoes-text {
+    color: var(--cinza-medio);
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.info-content small {
+    color: #666;
+    font-style: italic;
+    margin-left: 10px;
+}
+
+/* Rodapé do Orçamento */
+.orcamento-footer-completo {
+    background: linear-gradient(135deg, var(--marrom-escuro), #6D5A3E);
+    color: var(--branco);
+    padding: 30px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.contato-section h4 {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+    color: var(--bege-claro);
+    font-weight: 600;
+}
+
+.contato-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contato-item {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    opacity: 0.9;
+}
+
+.validade-section {
+    text-align: right;
+}
+
+.validade-texto {
+    margin-bottom: 15px;
+    opacity: 0.8;
+}
+
+.obrigado-texto {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: var(--bege-claro);
+}
+
+/* Responsividade para Orçamento Completo */
+@media (max-width: 768px) {
+    .header-principal {
+        flex-direction: column;
+        gap: 20px;
+        text-align: left;
+    }
+    
+    .orcamento-meta {
+        align-items: flex-start;
+        text-align: left;
+    }
+    
+    .profissional-nome {
+        font-size: 2rem;
+    }
+    
+    .cliente-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .orcamento-footer-completo {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .validade-section {
+        text-align: left;
+    }
+    
+    .col-numero {
+        width: 50px;
+    }
+    
+    .col-peca {
+        width: 30%;
+    }
+    
+    .col-servico {
+        width: 35%;
+    }
+    
+    .col-valor {
+        width: 25%;
+    }
+}
+
+@media (max-width: 480px) {
+    .orcamento-completo {
+        margin: 0 -10px;
+        border-radius: 0;
+    }
+    
+    .orcamento-header,
+    .cliente-section,
+    .itens-section,
+    .info-section,
+    .orcamento-footer-completo {
+        padding: 20px;
+    }
+    
+    .profissional-nome {
+        font-size: 1.8rem;
+    }
+    
+    .orcamento-numero {
+        font-size: 1.3rem;
+        padding: 6px 12px;
+    }
+    
+    .itens-table-melhorada {
+        font-size: 0.9rem;
+    }
+    
+    .itens-table-melhorada th,
+    .itens-table-melhorada td {
+        padding: 10px 8px;
+    }
+    
+    .total-valor {
+        font-size: 1.2rem;
+    }
+}

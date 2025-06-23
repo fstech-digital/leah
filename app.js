@@ -607,78 +607,255 @@ class App {
     }
 
     createOrcamentoViewer(orcamento, profissional) {
+        // Cabeçalho profissional
+        const dataFormatada = Utils.formatDate(orcamento.data_criacao);
+        const statusClass = this.getStatusClass(orcamento.status);
+        const statusText = this.getStatusText(orcamento.status);
+        
+        // Calcular total alternativo se houver itens com valores alternativos
+        let totalAlternativo = 0;
+        let temValorAlternativo = false;
+        
         const itensHtml = orcamento.itens.map(item => {
             let servicoText = Utils.sanitizeHtml(item.servico);
-            let valorText = Utils.formatCurrency(item.valor);
+            let valorPrincipal = Utils.formatCurrency(item.valor);
+            let valorAlternativoHtml = '';
 
             // Adicionar valor alternativo se existir
             if (item.valor_alternativo) {
-                servicoText += `<br><small style="color: #666; font-style: italic;">Alternativo: ${Utils.sanitizeHtml(item.valor_alternativo.descricao)} - ${Utils.formatCurrency(item.valor_alternativo.valor)}</small>`;
+                temValorAlternativo = true;
+                totalAlternativo += item.valor_alternativo.valor;
+                valorAlternativoHtml = `
+                    <div class="valor-alternativo">
+                        <small class="alt-label">${Utils.sanitizeHtml(item.valor_alternativo.descricao)}:</small>
+                        <small class="alt-valor">${Utils.formatCurrency(item.valor_alternativo.valor)}</small>
+                    </div>
+                `;
+            } else {
+                totalAlternativo += item.valor;
             }
 
             return `
-                <tr>
-                    <td>${item.numero}</td>
-                    <td>${Utils.sanitizeHtml(item.peca)}</td>
-                    <td>${servicoText}</td>
-                    <td class="valor-cell">${valorText}</td>
+                <tr class="item-row">
+                    <td class="item-numero">${item.numero}</td>
+                    <td class="item-peca">${Utils.sanitizeHtml(item.peca)}</td>
+                    <td class="item-servico">
+                        <div class="servico-principal">${servicoText}</div>
+                        ${valorAlternativoHtml}
+                    </td>
+                    <td class="valor-cell">
+                        <div class="valor-principal">${valorPrincipal}</div>
+                        ${item.valor_alternativo ? `<div class="valor-alt-display">${Utils.formatCurrency(item.valor_alternativo.valor)}</div>` : ''}
+                    </td>
                 </tr>
             `;
         }).join('');
 
-        const infoAdicional = [];
-        if (orcamento.prazo) {
-            infoAdicional.push(`<p><strong>Prazo de Entrega:</strong> ${Utils.formatDate(orcamento.prazo)}</p>`);
-        }
-        if (orcamento.observacoes) {
-            infoAdicional.push(`<p><strong>Observações:</strong> ${Utils.sanitizeHtml(orcamento.observacoes)}</p>`);
-        }
-
-        return `
-            <h1 class="orcamento-titulo">Orçamento #${orcamento.id}</h1>
-            
-            <div class="cliente-info">
-                <h4>Dados do Cliente</h4>
-                <div class="cliente-details">
-                    <div><strong>Nome:</strong> ${Utils.sanitizeHtml(orcamento.cliente.nome)}</div>
-                    ${orcamento.cliente.telefone ? `<div><strong>Telefone:</strong> ${Utils.formatPhone(orcamento.cliente.telefone)}</div>` : ''}
-                    ${orcamento.cliente.email ? `<div><strong>Email:</strong> ${Utils.sanitizeHtml(orcamento.cliente.email)}</div>` : ''}
-                    <div><strong>Data:</strong> ${Utils.formatDate(orcamento.data_criacao)}</div>
+        // Resumo de valores
+        const resumoValores = `
+            <div class="resumo-valores">
+                <div class="resumo-linha">
+                    <span>Subtotal (${orcamento.itens.length} ${orcamento.itens.length === 1 ? 'item' : 'itens'}):</span>
+                    <span class="valor-subtotal">${Utils.formatCurrency(orcamento.total)}</span>
                 </div>
-            </div>
-
-            <table class="itens-table">
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Peça/Produto</th>
-                        <th>Serviço</th>
-                        <th>Valor</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${itensHtml}
-                </tbody>
-            </table>
-
-            <div class="orcamento-footer">
-                <div class="info-adicional">
-                    ${infoAdicional.join('')}
-                    <div class="profissional-info" style="margin-top: 30px; padding-top: 20px; border-top: 1px solid var(--rosa-suave);">
-                        <h5>Contato</h5>
-                        <p><strong>${profissional.nome || 'Leah Costura'}</strong></p>
-                        ${profissional.telefone ? `<p>${Utils.formatPhone(profissional.telefone)}</p>` : ''}
-                        ${profissional.endereco ? `<p>${profissional.endereco}</p>` : ''}
-                        ${profissional.email ? `<p>${profissional.email}</p>` : ''}
+                ${temValorAlternativo ? `
+                    <div class="resumo-linha alternativo">
+                        <span>Total com valores alternativos:</span>
+                        <span class="valor-alternativo-total">${Utils.formatCurrency(totalAlternativo)}</span>
                     </div>
-                </div>
-                
-                <div class="total-final">
-                    <h4>Total Geral</h4>
-                    <div class="valor">${Utils.formatCurrency(orcamento.total)}</div>
+                ` : ''}
+                <div class="resumo-linha total-final-linha">
+                    <span class="total-label">TOTAL GERAL:</span>
+                    <span class="total-valor">${Utils.formatCurrency(orcamento.total)}</span>
                 </div>
             </div>
         `;
+
+        // Informações adicionais organizadas
+        const infoAdicional = [];
+        if (orcamento.prazo) {
+            const prazoFormatado = Utils.formatDate(orcamento.prazo);
+            const diasRestantes = this.calcularDiasRestantes(orcamento.prazo);
+            infoAdicional.push(`
+                <div class="info-item">
+                    <div class="info-icon">📅</div>
+                    <div class="info-content">
+                        <strong>Prazo de Entrega:</strong> ${prazoFormatado}
+                        ${diasRestantes !== null ? `<small>${diasRestantes}</small>` : ''}
+                    </div>
+                </div>
+            `);
+        }
+        
+        if (orcamento.observacoes) {
+            infoAdicional.push(`
+                <div class="info-item">
+                    <div class="info-icon">📝</div>
+                    <div class="info-content">
+                        <strong>Observações:</strong><br>
+                        <span class="observacoes-text">${Utils.sanitizeHtml(orcamento.observacoes)}</span>
+                    </div>
+                </div>
+            `);
+        }
+
+        return `
+            <div class="orcamento-completo">
+                <!-- Cabeçalho do Orçamento -->
+                <div class="orcamento-header">
+                    <div class="header-principal">
+                        <div class="logo-section">
+                            <h1 class="profissional-nome">${profissional?.nome || 'Leah Karina'}</h1>
+                            <p class="profissional-subtitulo">Costura Profissional</p>
+                        </div>
+                        <div class="orcamento-meta">
+                            <div class="orcamento-numero">Orçamento #${orcamento.id}</div>
+                            <div class="orcamento-data">${dataFormatada}</div>
+                            <div class="orcamento-status ${statusClass}">${statusText}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dados do Cliente -->
+                <div class="cliente-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">👤</span>
+                        Dados do Cliente
+                    </h3>
+                    <div class="cliente-grid">
+                        <div class="cliente-item">
+                            <label>Nome Completo:</label>
+                            <span>${Utils.sanitizeHtml(orcamento.cliente.nome)}</span>
+                        </div>
+                        ${orcamento.cliente.telefone ? `
+                            <div class="cliente-item">
+                                <label>Telefone:</label>
+                                <span>${Utils.formatPhone(orcamento.cliente.telefone)}</span>
+                            </div>
+                        ` : ''}
+                        ${orcamento.cliente.email ? `
+                            <div class="cliente-item">
+                                <label>Email:</label>
+                                <span>${Utils.sanitizeHtml(orcamento.cliente.email)}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Itens do Orçamento -->
+                <div class="itens-section">
+                    <h3 class="section-title">
+                        <span class="section-icon">📋</span>
+                        Itens do Orçamento
+                    </h3>
+                    <div class="table-container">
+                        <table class="itens-table-melhorada">
+                            <thead>
+                                <tr>
+                                    <th class="col-numero">#</th>
+                                    <th class="col-peca">Peça/Produto</th>
+                                    <th class="col-servico">Descrição do Serviço</th>
+                                    <th class="col-valor">Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${itensHtml}
+                            </tbody>
+                        </table>
+                    </div>
+                    ${resumoValores}
+                </div>
+
+                <!-- Informações Adicionais -->
+                ${infoAdicional.length > 0 ? `
+                    <div class="info-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">ℹ️</span>
+                            Informações Adicionais
+                        </h3>
+                        <div class="info-grid">
+                            ${infoAdicional.join('')}
+                        </div>
+                    </div>
+                ` : ''}
+
+                <!-- Rodapé Profissional -->
+                <div class="orcamento-footer-completo">
+                    <div class="contato-section">
+                        <h4>Contato Profissional</h4>
+                        <div class="contato-info">
+                            <div class="contato-item">
+                                <strong>${profissional?.nome || 'Leah Karina'}</strong>
+                            </div>
+                            ${profissional?.telefone ? `
+                                <div class="contato-item">
+                                    📞 ${Utils.formatPhone(profissional.telefone)}
+                                </div>
+                            ` : ''}
+                            ${profissional?.email ? `
+                                <div class="contato-item">
+                                    ✉️ ${profissional.email}
+                                </div>
+                            ` : ''}
+                            ${profissional?.endereco ? `
+                                <div class="contato-item">
+                                    📍 ${profissional.endereco}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="validade-section">
+                        <p class="validade-texto">
+                            <small>Este orçamento tem validade de 30 dias a partir da data de emissão.</small>
+                        </p>
+                        <p class="obrigado-texto">
+                            Obrigada pela preferência! 💖
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getStatusClass(status) {
+        const statusMap = {
+            'pendente': 'status-pendente',
+            'aprovado': 'status-aprovado', 
+            'rascunho': 'status-rascunho',
+            'compartilhado': 'status-compartilhado',
+            'concluido': 'status-concluido'
+        };
+        return statusMap[status] || 'status-pendente';
+    }
+
+    getStatusText(status) {
+        const statusMap = {
+            'pendente': 'Pendente',
+            'aprovado': 'Aprovado',
+            'rascunho': 'Rascunho', 
+            'compartilhado': 'Compartilhado',
+            'concluido': 'Concluído'
+        };
+        return statusMap[status] || 'Pendente';
+    }
+
+    calcularDiasRestantes(prazo) {
+        if (!prazo) return null;
+        const hoje = new Date();
+        const dataPrazo = new Date(prazo);
+        const diffTime = dataPrazo - hoje;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays > 1) {
+            return `(faltam ${diffDays} dias)`;
+        } else if (diffDays === 1) {
+            return '(falta 1 dia)';
+        } else if (diffDays === 0) {
+            return '(vence hoje)';
+        } else {
+            return `(atrasado ${Math.abs(diffDays)} ${Math.abs(diffDays) === 1 ? 'dia' : 'dias'})`;
+        }
     }
 
     editarOrcamento() {
