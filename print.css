@@ -1,0 +1,163 @@
+/* Print Styles */
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+    
+    body {
+        background: white !important;
+        font-size: 12pt;
+        line-height: 1.4;
+        color: #000 !important;
+    }
+    
+    .header,
+    .no-print,
+    .page-header,
+    .btn,
+    .modal {
+        display: none !important;
+    }
+    
+    .page {
+        display: block !important;
+        page-break-inside: avoid;
+    }
+    
+    .orcamento-viewer {
+        box-shadow: none !important;
+        border: 1px solid #ddd;
+        margin: 0;
+        padding: 20pt;
+    }
+    
+    .orcamento-titulo {
+        font-size: 18pt;
+        color: #8b5a6f !important;
+        text-align: center;
+        margin-bottom: 20pt;
+        border-bottom: 2pt solid #8b5a6f;
+        padding-bottom: 10pt;
+    }
+    
+    .cliente-info {
+        background: #f8e5e8 !important;
+        border: 1px solid #d68a9c;
+        padding: 15pt;
+        margin-bottom: 20pt;
+        page-break-inside: avoid;
+    }
+    
+    .cliente-info h4 {
+        font-size: 14pt;
+        color: #8b5a6f !important;
+        margin-bottom: 10pt;
+    }
+    
+    .cliente-details {
+        display: block;
+    }
+    
+    .cliente-details div {
+        margin-bottom: 5pt;
+    }
+    
+    .itens-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20pt;
+        page-break-inside: avoid;
+    }
+    
+    .itens-table th {
+        background: #8b5a6f !important;
+        color: white !important;
+        padding: 8pt;
+        border: 1px solid #666;
+        font-weight: bold;
+    }
+    
+    .itens-table td {
+        padding: 8pt;
+        border: 1px solid #ddd;
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .itens-table tr:nth-child(even) {
+        background: #f8e5e8 !important;
+    }
+    
+    .valor-cell {
+        text-align: right;
+        font-weight: bold;
+    }
+    
+    .orcamento-footer {
+        display: block;
+        page-break-inside: avoid;
+    }
+    
+    .info-adicional {
+        margin-bottom: 15pt;
+    }
+    
+    .info-adicional h5 {
+        color: #8b5a6f !important;
+        font-weight: bold;
+        margin-bottom: 5pt;
+    }
+    
+    .total-final {
+        background: #8b5a6f !important;
+        color: white !important;
+        padding: 15pt;
+        border: 2px solid #8b5a6f;
+        text-align: center;
+        margin-top: 20pt;
+    }
+    
+    .total-final h4 {
+        font-size: 12pt;
+        margin-bottom: 5pt;
+    }
+    
+    .total-final .valor {
+        font-size: 20pt;
+        font-weight: bold;
+    }
+    
+    /* Cabeçalho e rodapé da impressão */
+    @page {
+        margin: 2cm;
+        @top-center {
+            content: "Leah Costura - Orçamento";
+            font-family: 'Playfair Display', serif;
+            font-size: 10pt;
+            color: #8b5a6f;
+        }
+        @bottom-right {
+            content: "Página " counter(page) " de " counter(pages);
+            font-size: 9pt;
+            color: #666;
+        }
+    }
+    
+    /* Quebras de página */
+    .cliente-info,
+    .itens-table,
+    .total-final {
+        page-break-inside: avoid;
+    }
+    
+    .form-section {
+        page-break-inside: avoid;
+    }
+    
+    /* Ajustes para textos pequenos */
+    .orcamento-info small {
+        font-size: 9pt;
+        color: #666 !important;
+    }
+}

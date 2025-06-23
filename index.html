@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leah Costura - Sistema de Orçamentos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="print.css" media="print">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="container">
+                <div class="logo">
+                    <h1>Leah Costura</h1>
+                    <p>Orçamentos Profissionais</p>
+                </div>
+                <nav class="nav">
+                    <button id="nav-dashboard" class="nav-btn active">Dashboard</button>
+                    <button id="nav-novo" class="nav-btn">Novo Orçamento</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="container">
+                <!-- Dashboard -->
+                <section id="dashboard" class="page active">
+                    <div class="page-header">
+                        <h2>Meus Orçamentos</h2>
+                        <button id="btn-novo-orcamento" class="btn btn-primary">
+                            <span class="icon">+</span>
+                            Novo Orçamento
+                        </button>
+                    </div>
+                    
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Buscar por cliente ou data..." class="search-input">
+                    </div>
+
+                    <div class="orcamentos-grid" id="orcamentos-list">
+                        <!-- Orçamentos serão carregados aqui -->
+                    </div>
+
+                    <div class="empty-state" id="empty-state" style="display: none;">
+                        <div class="empty-icon">📋</div>
+                        <h3>Nenhum orçamento encontrado</h3>
+                        <p>Crie seu primeiro orçamento para começar</p>
+                        <button class="btn btn-primary">Criar Orçamento</button>
+                    </div>
+                </section>
+
+                <!-- Novo Orçamento -->
+                <section id="novo-orcamento" class="page">
+                    <div class="page-header">
+                        <h2>Novo Orçamento</h2>
+                        <button id="btn-voltar" class="btn btn-secondary">← Voltar</button>
+                    </div>
+
+                    <form id="form-orcamento" class="orcamento-form">
+                        <!-- Dados do Cliente -->
+                        <div class="form-section">
+                            <h3>Dados do Cliente</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="cliente-nome">Nome Completo *</label>
+                                    <input type="text" id="cliente-nome" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente-telefone">Telefone</label>
+                                    <input type="tel" id="cliente-telefone" placeholder="(11) 99999-9999">
+                                </div>
+                                <div class="form-group">
+                                    <label for="cliente-email">Email</label>
+                                    <input type="email" id="cliente-email">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Itens do Orçamento -->
+                        <div class="form-section">
+                            <div class="section-header">
+                                <h3>Itens do Orçamento</h3>
+                                <button type="button" id="btn-adicionar-item" class="btn btn-outline">+ Adicionar Item</button>
+                            </div>
+                            <div id="itens-container">
+                                <!-- Itens serão adicionados aqui -->
+                            </div>
+                        </div>
+
+                        <!-- Informações Adicionais -->
+                        <div class="form-section">
+                            <h3>Informações Adicionais</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="prazo">Prazo de Entrega</label>
+                                    <input type="date" id="prazo">
+                                </div>
+                                <div class="form-group full-width">
+                                    <label for="observacoes">Observações</label>
+                                    <textarea id="observacoes" rows="3" placeholder="Observações adicionais..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Total -->
+                        <div class="total-section">
+                            <div class="total-display">
+                                <span>Total: </span>
+                                <span id="total-valor" class="total-value">R$ 0,00</span>
+                            </div>
+                        </div>
+
+                        <!-- Ações -->
+                        <div class="form-actions">
+                            <button type="button" id="btn-salvar-rascunho" class="btn btn-secondary">Salvar Rascunho</button>
+                            <button type="submit" class="btn btn-primary">Criar Orçamento</button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- Visualizar Orçamento -->
+                <section id="visualizar-orcamento" class="page">
+                    <div class="page-header no-print">
+                        <h2>Orçamento</h2>
+                        <div class="actions">
+                            <button id="btn-editar" class="btn btn-outline">Editar</button>
+                            <button id="btn-duplicar" class="btn btn-outline">Duplicar</button>
+                            <button id="btn-compartilhar" class="btn btn-primary">Compartilhar</button>
+                            <button id="btn-voltar-vis" class="btn btn-secondary">← Voltar</button>
+                        </div>
+                    </div>
+
+                    <div class="orcamento-viewer" id="orcamento-content">
+                        <!-- Conteúdo do orçamento será carregado aqui -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal de Compartilhamento -->
+    <div id="modal-compartilhar" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Compartilhar Orçamento</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="share-option">
+                    <label>Link do Orçamento:</label>
+                    <div class="copy-link">
+                        <input type="text" id="share-link" readonly>
+                        <button id="btn-copiar-link" class="btn btn-outline">Copiar</button>
+                    </div>
+                </div>
+                <div class="share-option">
+                    <button id="btn-whatsapp" class="btn btn-whatsapp">
+                        📱 Enviar pelo WhatsApp
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="storage.js"></script>
+    <script src="utils.js"></script>
+    <script src="router.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
