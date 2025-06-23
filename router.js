@@ -49,6 +49,11 @@ class Router {
             handler: (params) => this.showOrcamentoPorHash(params.hash),
             title: 'Orçamento - Leah Karina'
         });
+
+        this.addRoute('v/:data', {
+            handler: (params) => this.showOrcamentoCompacto(params.data),
+            title: 'Orçamento - Leah Karina'
+        });
     }
 
     addRoute(path, config) {
@@ -253,6 +258,53 @@ class Router {
         this.showPage('visualizar-orcamento');
         if (window.app && window.app.loadOrcamentoCompartilhado) {
             window.app.loadOrcamentoCompartilhado(orcamento);
+        }
+    }
+
+    showOrcamentoCompacto(encodedData) {
+        try {
+            // Decodificar dados compactos
+            const normalizedData = encodedData.replace(/[-_]/g, (char) => {
+                return { '-': '+', '_': '/' }[char];
+            });
+            
+            const paddedData = normalizedData + '='.repeat((4 - normalizedData.length % 4) % 4);
+            const jsonString = atob(paddedData);
+            const dadosCompactos = JSON.parse(jsonString);
+            
+            // Converter para formato completo
+            const orcamento = {
+                id: dadosCompactos.i,
+                cliente: {
+                    nome: dadosCompactos.c,
+                    telefone: dadosCompactos.t,
+                    email: dadosCompactos.e
+                },
+                itens: dadosCompactos.it.map(item => ({
+                    numero: item.n,
+                    peca: item.p,
+                    servico: item.s,
+                    valor: item.v,
+                    ...(item.va && { valor_alternativo: item.va })
+                })),
+                total: dadosCompactos.to,
+                prazo: dadosCompactos.pr,
+                observacoes: dadosCompactos.ob,
+                data_criacao: dadosCompactos.dc
+            };
+
+            console.log('Orçamento decodificado:', orcamento);
+
+            // Mostrar página de visualização
+            this.showPage('visualizar-orcamento');
+            if (window.app && window.app.loadOrcamentoCompartilhado) {
+                window.app.loadOrcamentoCompartilhado(orcamento);
+            }
+
+        } catch (error) {
+            console.error('Erro ao decodificar orçamento:', error);
+            this.showError('Link inválido ou corrompido. Solicite um novo link.');
+            this.navigateTo('dashboard');
         }
     }
 

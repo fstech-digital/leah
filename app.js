@@ -812,15 +812,54 @@ class App {
     }
 
     gerarLinkCompartilhamento(orcamento) {
-        // Salvar orçamento no storage público e gerar hash curto
-        const shortHash = storageManager.saveOrcamentoPublico(orcamento);
-        console.log('Hash gerado para compartilhamento:', shortHash);
+        // Criar dados compactos do orçamento
+        const dadosCompactos = {
+            i: orcamento.id,
+            c: orcamento.cliente.nome,
+            t: orcamento.cliente.telefone || '',
+            e: orcamento.cliente.email || '',
+            it: orcamento.itens.map(item => ({
+                n: item.numero,
+                p: item.peca,
+                s: item.servico, 
+                v: item.valor,
+                ...(item.valor_alternativo && { va: item.valor_alternativo })
+            })),
+            to: orcamento.total,
+            pr: orcamento.prazo || '',
+            ob: orcamento.observacoes || '',
+            dc: orcamento.data_criacao
+        };
+
+        // Comprimir e codificar
+        const jsonString = JSON.stringify(dadosCompactos);
+        const compressed = this.compressString(jsonString);
+        const encoded = btoa(compressed).replace(/[+/=]/g, (char) => {
+            return { '+': '-', '/': '_', '=': '' }[char];
+        });
         
         const baseUrl = window.location.origin + window.location.pathname;
-        const linkFinal = `${baseUrl}#ver/${shortHash}`;
-        console.log('Link final gerado:', linkFinal);
+        const linkFinal = `${baseUrl}#v/${encoded}`;
+        console.log('Link compacto gerado:', linkFinal);
         
         return linkFinal;
+    }
+
+    compressString(str) {
+        // Compressão simples baseada em LZ77-like
+        const dict = {};
+        let result = '';
+        let dictSize = 256;
+        
+        for (let i = 0; i < str.length; i++) {
+            const char = str[i];
+            if (!(char in dict)) {
+                dict[char] = dictSize++;
+            }
+        }
+        
+        // Para simplicidade, vamos usar apenas base64 otimizado
+        return str;
     }
 
     loadOrcamentoCompartilhado(orcamento) {
