@@ -750,17 +750,23 @@ class App {
         }
     }
 
-    mostrarModalCompartilhar() {
+    async mostrarModalCompartilhar() {
         if (!this.currentOrcamento) return;
 
         const modal = document.getElementById('modal-compartilhar');
         const linkInput = document.getElementById('share-link');
         
         if (modal && linkInput) {
-            // Usar o novo método de geração de link com dados
-            const link = this.gerarLinkCompartilhamento(this.currentOrcamento);
-            linkInput.value = link;
+            linkInput.value = 'Gerando link...';
             modal.classList.add('active');
+            
+            try {
+                const link = await this.gerarLinkCompartilhamento(this.currentOrcamento);
+                linkInput.value = link;
+            } catch (error) {
+                console.error('Erro ao gerar link:', error);
+                linkInput.value = 'Erro ao gerar link';
+            }
         }
     }
 
