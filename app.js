@@ -686,7 +686,8 @@ class App {
         const linkInput = document.getElementById('share-link');
         
         if (modal && linkInput) {
-            const link = Utils.generateShareLink(this.currentOrcamento.id);
+            // Usar o novo método de geração de link com dados
+            const link = this.gerarLinkCompartilhamento(this.currentOrcamento);
             linkInput.value = link;
             modal.classList.add('active');
         }
@@ -717,10 +718,13 @@ class App {
         const config = storageManager.getConfig();
         const profissional = config.profissional || {};
         
+        // Gerar link com dados codificados
+        const linkCompartilhamento = this.gerarLinkCompartilhamento(this.currentOrcamento);
+        
         const mensagem = `🌟 *Orçamento #${this.currentOrcamento.id}*\n\n` +
                         `Olá ${this.currentOrcamento.cliente.nome}!\n\n` +
                         `Seu orçamento está pronto. Confira todos os detalhes:\n` +
-                        `${Utils.generateShareLink(this.currentOrcamento.id)}\n\n` +
+                        `${linkCompartilhamento}\n\n` +
                         `*Total: ${Utils.formatCurrency(this.currentOrcamento.total)}*\n\n` +
                         `Qualquer dúvida, entre em contato!\n\n` +
                         `${profissional.nome || 'Leah Karina'}`;
@@ -734,6 +738,61 @@ class App {
 
         const whatsappUrl = Utils.generateWhatsAppLink(telefone, mensagem);
         window.open(whatsappUrl, '_blank');
+    }
+
+    gerarLinkCompartilhamento(orcamento) {
+        // Codificar orçamento em base64 para incluir na URL
+        const dadosOrcamento = {
+            id: orcamento.id,
+            cliente: orcamento.cliente,
+            itens: orcamento.itens,
+            total: orcamento.total,
+            prazo: orcamento.prazo,
+            observacoes: orcamento.observacoes,
+            data_criacao: orcamento.data_criacao
+        };
+
+        const dadosJson = JSON.stringify(dadosOrcamento);
+        const dadosCodificados = btoa(encodeURIComponent(dadosJson));
+        
+        const baseUrl = window.location.origin + window.location.pathname;
+        return `${baseUrl}#compartilhado/${orcamento.id}?dados=${dadosCodificados}`;
+    }
+
+    loadOrcamentoCompartilhado(orcamento) {
+        // Carregar orçamento compartilhado (sem botões de ação)
+        const container = document.getElementById('orcamento-content');
+        if (!container) return;
+
+        this.currentOrcamento = orcamento;
+
+        const config = storageManager.getConfig();
+        const profissional = config.profissional || {
+            nome: 'Leah Karina',
+            telefone: '(11) 95606-1906',
+            endereco: 'Tábata, São Paulo'
+        };
+
+        // Criar viewer sem botões de ação
+        const viewerHtml = this.createOrcamentoViewer(orcamento, profissional);
+        container.innerHTML = viewerHtml;
+
+        // Ocultar botões de ação para visualização pública
+        const pageHeader = document.querySelector('#visualizar-orcamento .page-header');
+        if (pageHeader) {
+            pageHeader.style.display = 'none';
+        }
+
+        // Adicionar título específico para compartilhamento
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'compartilhamento-header';
+        titleDiv.style.cssText = 'text-align: center; margin-bottom: 30px; padding: 20px; background: var(--bege-claro); border-radius: var(--border-radius);';
+        titleDiv.innerHTML = `
+            <h2 style="color: var(--marrom-escuro); margin-bottom: 10px;">Seu Orçamento</h2>
+            <p style="color: var(--marrom-escuro); margin: 0;">Orçamento preparado por <strong>Leah Karina</strong></p>
+        `;
+        
+        container.insertBefore(titleDiv, container.firstChild);
     }
 
     // Método para ser chamado pelo router quando carregando um orçamento específico

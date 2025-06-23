@@ -39,6 +39,11 @@ class Router {
             handler: (params) => this.editOrcamento(params.id),
             title: 'Editar Orçamento - Leah Karina'
         });
+
+        this.addRoute('compartilhado/:id', {
+            handler: (params) => this.showOrcamentoCompartilhado(params.id),
+            title: 'Orçamento - Leah Karina'
+        });
     }
 
     addRoute(path, config) {
@@ -191,6 +196,42 @@ class Router {
         setTimeout(() => {
             this.showNovoOrcamento(orcamento);
         }, 100);
+    }
+
+    showOrcamentoCompartilhado(id) {
+        // Tentar obter dados da URL primeiro
+        const urlParams = new URLSearchParams(window.location.hash.split('?')[1]);
+        const dadosCodificados = urlParams.get('dados');
+        
+        let orcamento = null;
+        
+        if (dadosCodificados) {
+            try {
+                // Decodificar dados da URL
+                const dadosJson = decodeURIComponent(atob(dadosCodificados));
+                orcamento = JSON.parse(dadosJson);
+                console.log('Orçamento carregado da URL:', orcamento);
+            } catch (error) {
+                console.error('Erro ao decodificar dados da URL:', error);
+            }
+        }
+        
+        // Se não conseguir da URL, tentar do storage local
+        if (!orcamento) {
+            orcamento = window.storageManager.getOrcamento(id);
+        }
+        
+        if (!orcamento) {
+            this.showError('Orçamento não disponível. Solicite um novo link à costureira.');
+            this.navigateTo('dashboard');
+            return;
+        }
+
+        // Mostrar página de visualização
+        this.showPage('visualizar-orcamento');
+        if (window.app && window.app.loadOrcamentoCompartilhado) {
+            window.app.loadOrcamentoCompartilhado(orcamento);
+        }
     }
 
     showPage(pageId) {

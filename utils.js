@@ -73,7 +73,8 @@ class Utils {
     // Gerar link único do orçamento
     static generateShareLink(orcamentoId) {
         const baseUrl = window.location.origin + window.location.pathname;
-        return `${baseUrl}#orcamento/${orcamentoId}`;
+        // Usar uma rota especial para compartilhamento público
+        return `${baseUrl}#compartilhado/${orcamentoId}`;
     }
 
     // Copiar texto para clipboard
