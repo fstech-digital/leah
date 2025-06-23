@@ -54,6 +54,11 @@ class Router {
             handler: (params) => this.showOrcamentoCompacto(params.data),
             title: 'Orçamento - Leah Karina'
         });
+
+        this.addRoute('s/:data', {
+            handler: (params) => this.showOrcamentoSimples(params.data),
+            title: 'Orçamento - Leah Karina'
+        });
     }
 
     addRoute(path, config) {
@@ -304,6 +309,58 @@ class Router {
         } catch (error) {
             console.error('Erro ao decodificar orçamento:', error);
             this.showError('Link inválido ou corrompido. Solicite um novo link.');
+            this.navigateTo('dashboard');
+        }
+    }
+
+    showOrcamentoSimples(encodedData) {
+        try {
+            // Decodificar dados simples
+            const normalizedData = encodedData.replace(/[-_]/g, (char) => {
+                return { '-': '+', '_': '/' }[char];
+            });
+            
+            const paddedData = normalizedData + '='.repeat((4 - normalizedData.length % 4) % 4);
+            const dataString = decodeURIComponent(atob(paddedData));
+            const [id, clienteNome, total, numItens, dataCriacao] = dataString.split('|');
+            
+            console.log('Dados decodificados:', { id, clienteNome, total, numItens, dataCriacao });
+
+            // Buscar orçamento completo no localStorage (se disponível)
+            let orcamentoCompleto = window.storageManager.getOrcamento(id);
+            
+            if (!orcamentoCompleto) {
+                // Criar visualização simplificada
+                orcamentoCompleto = {
+                    id: id,
+                    cliente: { nome: clienteNome },
+                    total: parseFloat(total),
+                    data_criacao: dataCriacao,
+                    itens: [],
+                    observacoes: `Este é um resumo do orçamento. Para ver todos os detalhes, entre em contato com Leah Karina.`,
+                    status: 'compartilhado'
+                };
+                
+                // Adicionar itens placeholder
+                for (let i = 1; i <= parseInt(numItens); i++) {
+                    orcamentoCompleto.itens.push({
+                        numero: i,
+                        peca: `Item ${i}`,
+                        servico: 'Detalhes disponíveis com a costureira',
+                        valor: 0
+                    });
+                }
+            }
+
+            // Mostrar página de visualização
+            this.showPage('visualizar-orcamento');
+            if (window.app && window.app.loadOrcamentoCompartilhado) {
+                window.app.loadOrcamentoCompartilhado(orcamentoCompleto);
+            }
+
+        } catch (error) {
+            console.error('Erro ao decodificar orçamento simples:', error);
+            this.showError('Link inválido. Solicite um novo link.');
             this.navigateTo('dashboard');
         }
     }

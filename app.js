@@ -812,54 +812,27 @@ class App {
     }
 
     gerarLinkCompartilhamento(orcamento) {
-        // Criar dados compactos do orçamento
-        const dadosCompactos = {
-            i: orcamento.id,
-            c: orcamento.cliente.nome,
-            t: orcamento.cliente.telefone || '',
-            e: orcamento.cliente.email || '',
-            it: orcamento.itens.map(item => ({
-                n: item.numero,
-                p: item.peca,
-                s: item.servico, 
-                v: item.valor,
-                ...(item.valor_alternativo && { va: item.valor_alternativo })
-            })),
-            to: orcamento.total,
-            pr: orcamento.prazo || '',
-            ob: orcamento.observacoes || '',
-            dc: orcamento.data_criacao
-        };
-
-        // Comprimir e codificar
-        const jsonString = JSON.stringify(dadosCompactos);
-        const compressed = this.compressString(jsonString);
-        const encoded = btoa(compressed).replace(/[+/=]/g, (char) => {
-            return { '+': '-', '/': '_', '=': '' }[char];
-        });
+        // Criar dados realmente mínimos - apenas o essencial para visualização
+        const dadosMinimos = [
+            orcamento.id,
+            orcamento.cliente.nome,
+            orcamento.total,
+            orcamento.itens.length,
+            orcamento.data_criacao?.split('T')[0] || new Date().toISOString().split('T')[0]
+        ];
+        
+        // Converter para string compacta separada por |
+        const dataString = dadosMinimos.join('|');
+        
+        // Codificar em base64 URL-safe
+        const encoded = btoa(encodeURIComponent(dataString))
+            .replace(/[+/=]/g, (char) => ({ '+': '-', '/': '_', '=': '' }[char]));
         
         const baseUrl = window.location.origin + window.location.pathname;
-        const linkFinal = `${baseUrl}#v/${encoded}`;
-        console.log('Link compacto gerado:', linkFinal);
+        const linkFinal = `${baseUrl}#s/${encoded}`;
+        console.log('Link simples gerado:', linkFinal);
         
         return linkFinal;
-    }
-
-    compressString(str) {
-        // Compressão simples baseada em LZ77-like
-        const dict = {};
-        let result = '';
-        let dictSize = 256;
-        
-        for (let i = 0; i < str.length; i++) {
-            const char = str[i];
-            if (!(char in dict)) {
-                dict[char] = dictSize++;
-            }
-        }
-        
-        // Para simplicidade, vamos usar apenas base64 otimizado
-        return str;
     }
 
     loadOrcamentoCompartilhado(orcamento) {
