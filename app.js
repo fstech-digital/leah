@@ -147,6 +147,9 @@ class App {
         // Carregar configurações ou dados iniciais se necessário
         const stats = storageManager.getEstatisticas();
         console.log('Estatísticas do sistema:', stats);
+        
+        // Limpar orçamentos públicos antigos (limpeza automática)
+        storageManager.cleanOldPublicOrcamentos();
     }
 
     // Dashboard
@@ -811,9 +814,13 @@ class App {
     gerarLinkCompartilhamento(orcamento) {
         // Salvar orçamento no storage público e gerar hash curto
         const shortHash = storageManager.saveOrcamentoPublico(orcamento);
+        console.log('Hash gerado para compartilhamento:', shortHash);
         
         const baseUrl = window.location.origin + window.location.pathname;
-        return `${baseUrl}#ver/${shortHash}`;
+        const linkFinal = `${baseUrl}#ver/${shortHash}`;
+        console.log('Link final gerado:', linkFinal);
+        
+        return linkFinal;
     }
 
     loadOrcamentoCompartilhado(orcamento) {
