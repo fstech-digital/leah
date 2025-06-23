@@ -249,10 +249,70 @@ class StorageManager {
         }
     }
 
+    // Sistema de compartilhamento público
+    saveOrcamentoPublico(orcamento) {
+        const publicKey = 'leah_orcamentos_publicos';
+        const publicData = JSON.parse(localStorage.getItem(publicKey) || '{}');
+        
+        // Gerar hash curto único
+        const shortHash = this.generateShortHash(orcamento.id);
+        
+        // Dados simplificados para compartilhamento
+        const dadosPublicos = {
+            id: orcamento.id,
+            cliente: orcamento.cliente,
+            itens: orcamento.itens,
+            total: orcamento.total,
+            prazo: orcamento.prazo,
+            observacoes: orcamento.observacoes,
+            data_criacao: orcamento.data_criacao,
+            timestamp: Date.now()
+        };
+        
+        publicData[shortHash] = dadosPublicos;
+        localStorage.setItem(publicKey, JSON.stringify(publicData));
+        
+        return shortHash;
+    }
+
+    getOrcamentoPublico(shortHash) {
+        const publicKey = 'leah_orcamentos_publicos';
+        const publicData = JSON.parse(localStorage.getItem(publicKey) || '{}');
+        return publicData[shortHash] || null;
+    }
+
+    generateShortHash(orcamentoId) {
+        // Gerar hash curto baseado no ID + timestamp
+        const str = orcamentoId + Date.now();
+        let hash = 0;
+        for (let i = 0; i < str.length; i++) {
+            const char = str.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash; // Convert to 32bit integer
+        }
+        return Math.abs(hash).toString(36).substring(0, 8);
+    }
+
+    // Limpar orçamentos públicos antigos (mais de 30 dias)
+    cleanOldPublicOrcamentos() {
+        const publicKey = 'leah_orcamentos_publicos';
+        const publicData = JSON.parse(localStorage.getItem(publicKey) || '{}');
+        const thirtyDaysAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
+        
+        Object.keys(publicData).forEach(hash => {
+            if (publicData[hash].timestamp < thirtyDaysAgo) {
+                delete publicData[hash];
+            }
+        });
+        
+        localStorage.setItem(publicKey, JSON.stringify(publicData));
+    }
+
     // Limpar todos os dados
     clearAll() {
         localStorage.removeItem(this.storageKey);
         localStorage.removeItem(this.configKey);
+        localStorage.removeItem('leah_orcamentos_publicos');
         this.init();
     }
 

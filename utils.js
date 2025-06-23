@@ -70,11 +70,10 @@ class Utils {
         return cleaned.length >= 10 && cleaned.length <= 11;
     }
 
-    // Gerar link único do orçamento
+    // Gerar link único do orçamento (método legado - mantido para compatibilidade)
     static generateShareLink(orcamentoId) {
         const baseUrl = window.location.origin + window.location.pathname;
-        // Usar uma rota especial para compartilhamento público
-        return `${baseUrl}#compartilhado/${orcamentoId}`;
+        return `${baseUrl}#orcamento/${orcamentoId}`;
     }
 
     // Copiar texto para clipboard

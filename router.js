@@ -44,6 +44,11 @@ class Router {
             handler: (params) => this.showOrcamentoCompartilhado(params.id),
             title: 'Orçamento - Leah Karina'
         });
+
+        this.addRoute('ver/:hash', {
+            handler: (params) => this.showOrcamentoPorHash(params.hash),
+            title: 'Orçamento - Leah Karina'
+        });
     }
 
     addRoute(path, config) {
@@ -223,6 +228,23 @@ class Router {
         
         if (!orcamento) {
             this.showError('Orçamento não disponível. Solicite um novo link à costureira.');
+            this.navigateTo('dashboard');
+            return;
+        }
+
+        // Mostrar página de visualização
+        this.showPage('visualizar-orcamento');
+        if (window.app && window.app.loadOrcamentoCompartilhado) {
+            window.app.loadOrcamentoCompartilhado(orcamento);
+        }
+    }
+
+    showOrcamentoPorHash(hash) {
+        // Buscar orçamento pelo hash curto
+        const orcamento = window.storageManager.getOrcamentoPublico(hash);
+        
+        if (!orcamento) {
+            this.showError('Orçamento não encontrado ou expirado. Solicite um novo link.');
             this.navigateTo('dashboard');
             return;
         }

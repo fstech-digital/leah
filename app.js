@@ -809,22 +809,11 @@ class App {
     }
 
     gerarLinkCompartilhamento(orcamento) {
-        // Codificar orçamento em base64 para incluir na URL
-        const dadosOrcamento = {
-            id: orcamento.id,
-            cliente: orcamento.cliente,
-            itens: orcamento.itens,
-            total: orcamento.total,
-            prazo: orcamento.prazo,
-            observacoes: orcamento.observacoes,
-            data_criacao: orcamento.data_criacao
-        };
-
-        const dadosJson = JSON.stringify(dadosOrcamento);
-        const dadosCodificados = btoa(encodeURIComponent(dadosJson));
+        // Salvar orçamento no storage público e gerar hash curto
+        const shortHash = storageManager.saveOrcamentoPublico(orcamento);
         
         const baseUrl = window.location.origin + window.location.pathname;
-        return `${baseUrl}#compartilhado/${orcamento.id}?dados=${dadosCodificados}`;
+        return `${baseUrl}#ver/${shortHash}`;
     }
 
     loadOrcamentoCompartilhado(orcamento) {
